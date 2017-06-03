@@ -1,11 +1,17 @@
 # gads
 
-Package gads provides a wrapper for the Google Adwords SOAP API.
+Package gads provides a wrapper for the Google Adwords SOAP API.  Based off of
+[emiddleton/gads](https://github.com/emiddleton/gads), this version
+was updated to support v201605, v201607 and v201609 and Go 1.5.
+
+Currently this project remains a fork and is a joint effort between
+[colinmutter/gads](https://github.com/colinmutter/gads) and [rfink/gads](https://github.com/rfink/gads).
+
 
 ## installation
 
 ~~~
-go get github.com/emiddleton/gads
+	go get github.com/colinmutter/gads
 ~~~
 
 ## setup
@@ -19,6 +25,27 @@ setup a configuration file.
 2. https://developers.google.com/adwords/api/docs/signingup
 3. https://developers.google.com/adwords/api/docs/guides/authentication
 
+Currently, the you need to supply credentials via NewCredentialsFromParams
+or NewCredentialsFromFile.  The credentials can be obtained from the file
+generated in the previous step.
+
+For example in this CLI script, I am handling a conf file via flags:
+
+    go run cli/adgroups_awql.go -oauth ~/auth.json
+
+NOTE: Other examples still need to be updated to support the removal of the built-in
+oauth configuration file flag.
+
+## versions
+
+This project currently supports v201605, v201607 and v201609.  To select
+the appropriate version, import the specific package:
+
+	  import (
+	    gads "github.com/colinmutter/gads/v201609"
+	  )
+
+
 ## usage
 
 The package is comprised of services used to manipulate various
@@ -27,7 +54,7 @@ gads.Auth and parse it to the service initializer, then can call
 the service methods on the service object.
 
 ~~~ go
-     authConf, err := NewCredentials(context.TODO())
+     authConf, err := NewCredentialsFromFile("~/creds.json")
      campaignService := gads.NewCampaignService(&authConf.Auth)
 
      campaigns, totalCount, err := campaignService.Get(
@@ -51,3 +78,7 @@ See godoc for further documentation and examples.
 ## about
 
 Gads is developed by [Edward Middleton](https://blog.vortorus.net/)
+
+and supported by:
+ - [Colin Mutter](http://github.com/colinmutter)
+ - [Ryan Fink](http://github.com/rfink)
